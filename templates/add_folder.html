@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<form action="/create_folder" class="navbar-form navbar-right" method="POST">
+    <div class="form-group">
+        <input type="text" class="form-control" name="FolderName" id="search" placeholder="Enter folder name">
+    </div>
+        
+     <button id ="submit-button" type="submit" value="search"class="btn btn-default">Submit</button>
+</form>
+
+
+
+{% endblock %}

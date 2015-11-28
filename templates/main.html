@@ -1,0 +1,798 @@
+{% extends 'base.html' %}
+{% block head %}
+
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+
+    
+    
+
+
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container" id="results-section">
+<!-- Top Attractions -->
+    
+    <div class="result_header">
+    <h2>Top Attractions</h2>
+    </div>
+    
+    {% for place in attraction_results %}
+    <div class="result-div"> 
+      <div class="yelpImage" id="{{ place['id'] }}" data-lat="{{ place['location']['coordinate']['latitude'] }}" data-long="{{ place['location']['coordinate']['longitude'] }}">
+      	{% if place['name'] %}
+      	<h4>{{place['name']}}</h4>
+      	{% endif %}
+      	<p class="placeCategory"><b>{{ place['categories'][0][0] }}</b></p><br>
+        <p class="placePhone"><b>{{ place.get('display_phone') }}</b></p>
+      	{% if place.get('image_url') %}
+      	<div class="image-container"><img src="{{ place['image_url'] }}" alt="snippet_image"></div>
+      	{% else %}
+      	<div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+      	{% endif %}
+      	<a href="{{ place.get('url')}}" > Click to view on Yelp</a>
+      	<br><br>
+      	<p class="place-snippet" >{{ place.get('snippet_text') }}</p><br><br>
+      	{% if place['location']['address'] %}
+      	<p>{{ place['location']['address'][0] }}</p><br>
+      	{% endif %}
+      	<p>{{ place['location']['city'] }}</p>
+
+      </div>   
+    </div>
+
+
+
+<!-- Modal for top attractions-->
+
+<div class="modal fade" id="modal{{ place['id'] }}" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+			<div class="modal-body">
+			{% if place['name'] %}
+			<h4 id="{{ place['id'] }}-name">{{place['name']}}</h4>
+			{% endif %}
+      <p class="placeCategory-modal">{{ place['categories'][0][0] }}</p><br>
+			<p class="placeModalPhone">{{ place.get('display_phone') }}</p>
+			{% if place.get('image_url') %}
+			<div class="image-container"><img src="{{ place['image_url'] }}" alt="snippet_image"></div>
+			{% else %}
+			<div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+			{% endif %}
+			<p class="modal-text">{{ place.get('snippet_text') }}</p><br><br>
+			{% if place['location']['address'] %}
+			<p class="modal-text">{{ place['location']['address'][0] }}</p><br>
+			{% endif %}
+			<p class="modal-text">{{ place['location']['city'] }}</p>
+
+
+
+
+<!-- MAP in modal-->
+
+			<div class="modal-map">
+
+					MAP
+
+			</div>			
+
+
+
+
+
+
+
+<!-- Save to folder button-->
+			{% if 'logged_in_user' in session %}
+      <div class="dropdown">
+        <button id="{{ place['id'] }}-save" data-yelp-id="{{place['id']}}" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Save to Folder
+        <span class="caret"></span></button>
+          <ul class="dropdown-menu save-to-folder">
+
+            {% for folder in folders %}
+            <li class="save-to-folder-button"><a href="#">{{ folder.folder_name }}</a></li>
+            {% endfor %}
+          </ul>
+      </div>
+
+
+      <div class="createFolder">
+        <ul class="adding-folder-dropdown">
+          <li class="dropdown">
+            <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add a Folder</button>
+
+
+            <div class="dropdown-menu add-folder-dropdown" style="padding: 15px; padding-bottom: 0px;">
+              <form class="folderform"> 
+                <input name="FolderName" class="add-folder-value" type="text" placeholder="Type folder name"> 
+                <input type="submit" id="create-button" class="btn add-folder" value="Create">
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+
+
+
+			{% else %}
+			<button class="btn btn-primary" data-toggle="modal" data-target="#logInModal">Log in
+			</button>
+			<button class="btn btn-primary" data-toggle="modal" data-target="#signUpModal">Sign up
+			</button>
+			{% endif %}
+
+
+				<div class="modal-footer">
+                <button id="closeButton" type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endfor %}   
+
+
+
+
+
+
+<!-- Top hotels -->
+
+<div class="result_header">
+<h2>Top Hotels</h2>
+</div>
+{% for hotel in hotel_results %}
+
+<div class="result-div">
+<div class="yelpImage" id="{{ hotel['id'] }}" data-lat="{{ hotel['location']['coordinate']['latitude'] }}" data-long="{{ hotel['location']['coordinate']['longitude'] }}">
+  {% if hotel['name'] %}
+  <h4>{{hotel['name']}}</h4>
+  {% endif %}
+  <p class="placeCategory"><b>{{ hotel['categories'][0][0] }}</b></p><br>
+  <p class="placePhone"><b>{{ hotel.get('display_phone') }}</b></p>
+  {% if hotel.get('image_url') %}
+  <div class="image-container"><img src="{{ hotel['image_url'] }}" alt="snippet_image"></div>
+  {% else %}
+  <div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+  {% endif %}
+  <a href="{{ hotel.get('url')}}" > Click to view on Yelp</a>
+  <br><br>
+  <p class="place-snippet">{{ hotel.get('snippet_text') }}</p><br><br>
+  {% if hotel['location']['address'] %}
+  <p>{{ hotel['location']['address'][0] }}</p><br>
+  {% endif %}
+  <p>{{ hotel['location']['city'] }}</p>
+
+
+
+</div>
+</div>
+
+<!-- Modal for top hotels-->
+
+<div class="modal fade" id="modal{{ hotel['id'] }}" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+      <div class="modal-body">
+      {% if hotel['name'] %}
+      <h4 id="{{ hotel['id'] }}-name">{{hotel['name']}}</h4>
+      {% endif %}
+      <p class="placeCategory-modal">{{ hotel['categories'][0][0] }}</p><br>
+      <p class="placeModalPhone">{{ hotel.get('display_phone') }}</p>
+      {% if hotel.get('image_url') %}
+      <div class="image-container"><img src="{{ hotel['image_url'] }}" alt="snippet_image"></div>
+      {% else %}
+      <div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+      {% endif %}
+      <p class="modal-text">{{ hotel.get('snippet_text') }}</p><br><br>
+      {% if hotel['location']['address'] %}
+      <p class="modal-text">{{ hotel['location']['address'][0] }}</p><br>
+      {% endif %}
+      <p class="modal-text">{{ hotel['location']['city'] }}</p>
+
+
+<!-- MAP in modal-->
+
+      <div class="modal-map">
+
+          MAP
+
+      </div>       
+
+
+
+
+
+    <!-- Save to folder button-->
+      {% if 'logged_in_user' in session %}
+      <div class="dropdown">
+        <button id="{{ hotel['id'] }}-save" data-yelp-id="{{hotel['id']}}" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Save to Folder
+         <span class="caret"></span></button>
+          <ul class="dropdown-menu save-to-folder">
+
+            {% for folder in folders %}
+            <li class="save-to-folder-button"><a href="#">{{ folder.folder_name }}</a></li>
+            {% endfor %}
+          </ul>
+      </div>
+
+
+      <div class="createFolder">
+        <ul class="adding-folder-dropdown">
+          <li class="dropdown">
+            <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add a Folder</button>
+
+
+            <div class="dropdown-menu add-folder-dropdown" style="padding: 15px; padding-bottom: 0px;">
+              <form class="folderform"> 
+                <input name="FolderName" class="add-folder-value" type="text" placeholder="Type folder name"> 
+                <input type="submit" id="create-button" class="btn add-folder" value="Create">
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+
+        {% else %}
+      <button class="btn btn-primary" data-toggle="modal" data-target="#logInModal">Log in
+      </button>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#signUpModal">Sign up
+      </button>
+      {% endif %}
+      <!-- add save button to be saved in database -->
+        <div class="modal-footer">
+                <button id="closeButton" type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}   
+
+
+
+
+
+
+
+
+<!-- Top Restaurants -->
+
+<div class="result_header">
+<h2>Top Restaurants</h2>
+</div>
+{% for restaurant in restaurant_results %}
+
+<div class="result-div">
+<div class="yelpImage list_container" id="{{ restaurant['id'] }}" data-lat="{{ restaurant['location']['coordinate']['latitude'] }}" data-long="{{ restaurant['location']['coordinate']['longitude'] }}">
+  {% if restaurant['name'] %}
+  <h4>{{restaurant['name']}}</h4>
+  {% endif %}
+  <p class="placeCategory"><b>{{ restaurant['categories'][0][0] }}</b></p><br>
+  <p class="placePhone"><b>{{ restaurant.get('display_phone') }}</b></p>
+  {% if restaurant.get('image_url') %}
+  <div class="image-container"><img src="{{ restaurant['image_url'] }}" alt="snippet_image"></div>
+  {% else %}
+  <div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+  {% endif %}
+  <a href="{{ restaurant.get('url')}}" > Click to view on Yelp</a>
+  <br><br>
+  <p class="place-snippet">{{ restaurant.get('snippet_text') }}</p><br><br>
+  {% if restaurant['location']['address'] %}
+  <p>{{ restaurant['location']['address'][0] }}</p><br>
+  {% endif %}
+  <p>{{ restaurant['location']['city'] }}</p>
+
+
+</div>
+</div>
+
+
+<!-- Modal for top Restaurants-->
+
+<div class="modal fade" id="modal{{ restaurant['id'] }}" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+      <div class="modal-body">
+      {% if restaurant['name'] %}
+      <h4 id="{{ restaurant['id'] }}-name">{{restaurant['name']}}</h4>
+      {% endif %}
+      <p class="placeCategory-modal">{{ restaurant['categories'][0][0] }}</p><br>
+      <p class="placeModalPhone">{{ restaurant.get('display_phone') }}</p>
+      {% if restaurant.get('image_url') %}
+      <div class="image-container"><img src="{{ restaurant['image_url'] }}" alt="snippet_image"></div>
+      {% else %}
+      <div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+      {% endif %}
+      <p class="modal-text">{{ restaurant.get('snippet_text') }}</p><br><br>
+      {% if restaurant['location']['address'] %}
+      <p class="modal-text">{{ restaurant['location']['address'][0] }}</p><br>
+      {% endif %}
+      <p class="modal-text">{{ restaurant['location']['city'] }}</p>
+
+
+<!-- MAP in modal-->
+
+      <div class="modal-map">
+
+          MAP
+
+      </div>  
+
+        <!-- Save to folder button-->
+      {% if 'logged_in_user' in session %}
+      <div class="dropdown">
+        <button id="{{ restaurant['id'] }}-save" data-yelp-id="{{restaurant['id']}}"  class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Save to Folder
+        <span class="caret"></span></button>
+          <ul class="dropdown-menu save-to-folder">
+
+            {% for folder in folders %}
+            <li class="save-to-folder-button"><a href="#">{{ folder.folder_name }}</a></li>
+            {% endfor %}
+          </ul>
+      </div>
+
+
+      <div class="createFolder">
+        <ul class="adding-folder-dropdown">
+          <li class="dropdown">
+            <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add a Folder</button>
+
+
+            <div class="dropdown-menu add-folder-dropdown" style="padding: 15px; padding-bottom: 0px;">
+              <form class="folderform"> 
+                <input name="FolderName" class="add-folder-value" type="text" placeholder="Type folder name"> 
+                <input type="submit" id="create-button" class="btn add-folder" value="Create">
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+
+        {% else %}
+      <button class="btn btn-primary" data-toggle="modal" data-target="#logInModal">Log in
+      </button>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#signUpModal">Sign up
+      </button>
+      {% endif %}
+      <!-- add save button to be saved in database -->
+        <div class="modal-footer">
+                <button id="closeButton" type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}   
+
+
+
+
+
+<!-- Top Museums -->
+
+<div class="result_header">
+<h2>Top Museums</h2>
+</div>
+{% for museum in museum_results %}
+
+<div class="result-div">
+<div class="yelpImage list_container" id="{{ museum['id'] }}" data-lat="{{ museum['location']['coordinate']['latitude'] }}" data-long="{{ museum['location']['coordinate']['longitude'] }}">
+  {% if museum['name'] %}
+  <h4>{{museum['name']}}</h4>
+  {% endif %}
+  <p class="placeCategory"><b>{{ museum['categories'][0][0] }}</b></p><br>
+  <p class="placePhone"><b>{{ museum.get('display_phone') }}</b></p>
+  {% if museum.get('image_url') %}
+  <div class="image-container"><img src="{{ museum['image_url'] }}" alt="snippet_image"></div>
+  {% else %}
+  <div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+  {% endif %}
+  <a href="{{ museum.get('url')}}" > Click to view on Yelp</a>
+  <br><br>
+  <p class="place-snippet">{{ museum.get('snippet_text') }}</p><br><br>
+  {% if museum['location']['address'] %}
+  <p>{{ museum['location']['address'][0] }}</p><br>
+  {% endif %}
+  <p>{{ museum['location']['city'] }}</p>
+
+
+
+</div>
+</div>
+
+
+<!-- Modal for top Museums-->
+
+<div class="modal fade" id="modal{{ museum['id'] }}" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+      <div class="modal-body">
+      {% if museum['name'] %}
+      <h4 id="{{ museum['id'] }}-name">{{museum['name']}}</h4>
+      {% endif %}
+      <p class="placeCategory-modal">{{ museum['categories'][0][0] }}</p><br>
+      <p class="placeModalPhone">{{ museum.get('display_phone') }}</p>
+      {% if museum.get('image_url') %}
+      <div class="image-container"><img src="{{ museum['image_url'] }}" alt="snippet_image"></div>
+      {% else %}
+      <div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+      {% endif %}
+      <p class="modal-text">{{ museum.get('snippet_text') }}</p><br><br>
+      {% if museum['location']['address'] %}
+      <p class="modal-text">{{ museum['location']['address'][0] }}</p><br>
+      {% endif %}
+      <p class="modal-text">{{ museum['location']['city'] }}</p>
+
+
+<!-- MAP in modal-->
+
+      <div class="modal-map">
+
+          MAP
+
+      </div>  
+
+              <!-- Save to folder button-->
+      {% if 'logged_in_user' in session %}
+      <div class="dropdown">
+        <button id="{{ museum['id'] }}-save" data-yelp-id="{{museum['id']}}"  class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Save to Folder
+        <span class="caret"></span></button>
+          <ul class="dropdown-menu save-to-folder">
+
+            {% for folder in folders %}
+            <li class="save-to-folder-button"><a href="#">{{ folder.folder_name }}</a></li>
+            {% endfor %}
+          </ul>
+      </div>
+
+
+      <div class="createFolder">
+        <ul class="adding-folder-dropdown">
+          <li class="dropdown">
+            <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add a Folder</button>
+
+
+            <div class="dropdown-menu add-folder-dropdown" style="padding: 15px; padding-bottom: 0px;">
+              <form class="folderform"> 
+                <input name="FolderName" class="add-folder-value" type="text" placeholder="Type folder name"> 
+                <input type="submit" id="create-button" class="btn add-folder" value="Create">
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+
+        {% else %}
+      <button class="btn btn-primary" data-toggle="modal" data-target="#logInModal">Log in
+      </button>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#signUpModal">Sign up
+      </button>
+      {% endif %}
+      <!-- add save button to be saved in database -->
+        <div class="modal-footer">
+                <button id="closeButton" type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}   
+
+
+
+
+
+<!-- Top Festivals-->
+
+<div class="result_header">
+<h2>Top Festivals</h2>
+</div>
+{% for festival in festival_results %}
+
+<div class="result-div">
+<div class="yelpImage" id="{{ festival['id'] }}" data-lat="{{ festival['location']['coordinate']['latitude'] }}" data-long="{{ festival['location']['coordinate']['longitude'] }}">
+  {% if festival['name'] %}
+  <h4>{{festival['name']}}</h4>
+  {% endif %}
+  <p class="placeCategory"><b>{{ festival['categories'][0][0] }}</b></p><br>
+  <p class="placePhone"><b>{{ festival.get('display_phone') }}</b></p>
+  {% if festival.get('image_url') %}
+  <div class="image-container"><img src="{{ festival['image_url'] }}" alt="snippet_image"></div>
+  {% else %}
+  <div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+  {% endif %}
+  <a href="{{ festival.get('url')}}" > Click to view on Yelp</a>
+  <br><br>
+  <p class="place-snippet">{{ festival.get('snippet_text') }}</p><br><br>
+  {% if festival['location']['address'] %}
+  <p>{{ festival['location']['address'][0] }}</p><br>
+  {% endif %}
+  <p>{{ festival['location']['city'] }}</p>
+
+
+</div>
+</div>
+
+
+<!-- Modal for top Festivals-->
+
+<div class="modal fade" id="modal{{ festival['id'] }}" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+      <div class="modal-body">
+      {% if festival['name'] %}
+      <h4 id="{{ festival['id'] }}-name">{{ festival['name']}}</h4>
+      {% endif %}
+       <p class="placeCategory-modal">{{ festival['categories'][0][0] }}</p><br>
+      <p class="placeModalPhone">{{ festival.get('display_phone') }}</p>
+      {% if festival.get('image_url') %}
+      <div class="image-container"><img src="{{ festival['image_url'] }}" alt="snippet_image"></div>
+      {% else %}
+      <div class="image-container"><img src="static/img/placeholder.png" alt="image placeholder" style="width:100px;height:100px;"></div>
+      {% endif %}
+      <p class="modal-text">{{ festival.get('snippet_text') }}</p><br><br>
+      {% if festival['location']['address'] %}
+      <p class="modal-text">{{ festival['location']['address'][0] }}</p><br>
+      {% endif %}
+      <p class="modal-text">{{ festival['location']['city'] }}</p>
+
+
+<!-- MAP in modal-->
+
+      <div class="modal-map">
+
+          MAP
+
+      </div>     
+
+              <!-- Save to folder button-->
+      {% if 'logged_in_user' in session %}
+      <div class="dropdown">
+        <button id="{{ festival['id'] }}-save" data-yelp-id="{{festival['id']}}" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Save to Folder
+        <span class="caret"></span></button>
+          <ul class="dropdown-menu save-to-folder">
+
+            {% for folder in folders %}
+            <li class="save-to-folder-button"><a href="#">{{ folder.folder_name }}</a></li>
+            {% endfor %}
+          </ul>
+      </div>
+
+
+      <div class="createFolder">
+        <ul class="adding-folder-dropdown">
+          <li class="dropdown">
+            <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-plus"></span>&nbsp;Add a Folder</button>
+
+
+            <div class="dropdown-menu add-folder-dropdown" style="padding: 15px; padding-bottom: 0px;">
+              <form class="folderform"> 
+                <input name="FolderName" class="add-folder-value" type="text" placeholder="Type folder name"> 
+                <input type="submit" id="create-button" class="btn add-folder" value="Create">
+              </form>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+
+        {% else %}
+      <button class="btn btn-primary" data-toggle="modal" data-target="#logInModal">Log in
+      </button>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#signUpModal">Sign up
+      </button>
+      {% endif %}
+      <!-- add save button to be saved in database -->
+        <div class="modal-footer">
+                <button id="closeButton" type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}   
+
+
+
+
+
+
+<!-- Sign in / Log out Modal -->
+
+<!-- Modal window for Log in button-->
+<div class="modal fade" id="logInModal" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" 
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Log In
+                </h4>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                
+                <form class="form-horizontal" action="/modal-loggedIn" method="POST" role="form">
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label"
+                              for="inputUsername">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" 
+                        id="inputEmail3" name="username" placeholder="Username"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="inputPassword3" >Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control"
+                            id="inputPassword3" name="password" placeholder="Password"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <div class="checkbox">
+                        <label>
+                            <input type="checkbox"/><p> Remember me</p>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit" class="btn btn-primary">Log in</button>
+                    </div>
+                  </div>
+                </form>
+           </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                        data-dismiss="modal">
+                            Close
+                </button>
+               <!--  <button type="button" class="btn btn-primary">
+                    Save changes
+                </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" 
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    Sign Up
+                </h4>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body">
+                
+                <form class="form-horizontal" action="/signup" method="POST" role="form">
+                  <div class="form-group">
+                    <label  class="col-sm-2 control-label"
+                              for="inputFirstName">First Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="firstname" class="form-control" 
+                        id="inputFirstName" placeholder="First Name"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="inputLastName" >Last Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="lastname"
+                            id="inputLastName" placeholder="Last Name"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="inputemail" >Email Address</label>
+                    <div class="col-sm-10">
+                        <input type="email" class="form-control" name="email"
+                            id="inputEmail" placeholder="Email Address"/>
+                    </div>
+                  </div>
+                   <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="inputUserName" >User Name</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="username"
+                            id="inputUserName" placeholder="Username"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                          for="inputPassword" >Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" name="password"
+                            id="inputPassword" placeholder="Password"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <div class="checkbox">
+                        <label>
+                            <input type="checkbox"/><p> Remember me</p>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <button type="submit" class="btn btn-default">Sign Up</button>
+                    </div>
+                  </div>
+                </form>
+           </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                            Close
+                </button>
+               <!--  <button type="button" class="btn btn-primary">
+                    Save changes
+                </button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+    
+{% block js %}
+
+
+{% endblock %}
+
+
+
