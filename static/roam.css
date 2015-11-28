@@ -339,3 +339,70 @@ img {
 #restaurants-section .col-md-4.portfolio-item{
     background-color: #ddd;
 }
+
+.navbar-brand.topnav img{
+    padding: 0;
+}
+
+.form-control{
+    height: 40px;
+}
+
+.dropdown-menu.add-folder-dropdown{
+  height: 110px;
+}
+
+
+.createFolder {
+  width: auto;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.adding-folder-dropdown{
+  padding-left: 10px;
+}
+
+
+
+.add-folder-value{
+  height: 32px;
+  margin-bottom: 17px;
+}
+
+
+#submit-button{
+    width: 200px;
+    height: 40px;
+    background: #f9a11a;
+    color: white;
+    font-size: 1.3em;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+#search{
+  font-size: 1.2em;
+  font-style: italic;
+  
+}
+.btn.btn-primary.dropdown-toggle{
+    background-color: #f9a11a;
+    color: white;
+}
+
+.btn.dropdown-toggle:hover{
+    background-color: #aaa;
+    color: white;
+}
+
+.btn.btn-primary:hover{
+    background-color: #aaa;
+    color: white;
+}
+
+
+
+
+
