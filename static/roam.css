@@ -294,6 +294,7 @@ ol, ul {
 
 h1{
     color: black;
+    font-size: 3.2em
 }
 
 #tagline{
@@ -338,6 +339,11 @@ img {
 
 #restaurants-section .col-md-4.portfolio-item{
     background-color: #ddd;
+}
+
+
+.col-md-4.portfolio-item:hover {
+    cursor: pointer;
 }
 
 .navbar-brand.topnav img{
@@ -402,7 +408,30 @@ img {
     color: white;
 }
 
+.btn-primary{
+    background-color: #f9a11a;
+    color: white;
+    border-color: white;
+    margin-right: 10px;
+}
 
+.btn-primary:hover {
+    background-color: #aaa;
+    color: white;
+}
 
+.col-md-4.portfolio-item{
+    cursor: pointer;
+}
 
+#submit-button:hover {
+    background-color: white;
+    color: #f9a11a;
+}
+
+div.col-md-4.portfolio-item:hover {
+    cursor: pointer;
+    background:rgba(0,0,0,.10);
+    opacity:.8;
+}
 
