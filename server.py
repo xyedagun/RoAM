@@ -26,6 +26,19 @@ def index():
 
 
 
+@app.route('/folder-favorites')
+def opening_folder():
+    
+    user_id = session.get('user_id')
+
+    
+    user_places = Place_folder.query.filter_by(folder_id = 3).all()
+    places = Place.query.filter(user_places==user_places).all()
+
+    return render_template("main.html", user_id=user_id, user_places=user_places, places=places)
+    
+
+
 
 @app.route('/results', methods=['POST'])
 def get_result():

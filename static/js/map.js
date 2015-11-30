@@ -107,7 +107,8 @@ $(document).ready(function(){
 // $(document).on('ready', function() {
 // 	$('.folderList').on('click', function(evt){
 // 		e.preventDefault();
-// 		var folderToOpen = $(evt).find("a").val();
+// 		var folderToOpen = $(evt.currentTarget).find("a").val();
+		
 
 // });
 

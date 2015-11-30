@@ -431,7 +431,21 @@ img {
 
 div.col-md-4.portfolio-item:hover {
     cursor: pointer;
-    background:rgba(0,0,0,.10);
-    opacity:.8;
+    background-color: #f9a11a;
+    opacity:.9;
 }
 
+div.col-md-4.portfolio-item:hover h4{
+    color: white;
+}
+
+div.col-md-4.portfolio-item:hover p{
+    color: white;
+}
+
+div.col-md-4.portfolio-item:hover a{
+    color: #ddd;
+}
+#restaurants-section .col-md-4.portfolio-item:hover{
+    background-color: #f9a11a;
+}
