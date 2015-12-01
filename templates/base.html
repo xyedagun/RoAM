@@ -67,7 +67,7 @@
                         <ul class="dropdown-menu">
                         {% for folder in folders %}
 
-                        <li><a href="#">{{ folder.folder_name }}</a></li>
+                        <li><a href="/folder?folder_id={{folder.folder_id}}" target="_blank">{{ folder.folder_name }}</a></li>
                         
                         {% endfor %}
                     </ul>
@@ -369,7 +369,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 
 
-<script src="/static/js/map.js"></script>
+<script src="/static/js/roam.js"></script>
 <link href="../static/roam.css" rel="stylesheet">
 
 {% block js %}

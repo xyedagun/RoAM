@@ -1,7 +1,7 @@
 
 {% block head %}
 
-
+<link href='https://fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css'>
 
 
 
@@ -13,28 +13,53 @@
       }
 
       #map { 
-        position: relative;
+        position: fixed;
         width: 900px;
         height: 100%;
-        float: right }
+        float: right;
+         }
 
       #folderlist-container{
         position: absolute;
         float: left;
-      }
-      #folderlist-container{
         margin-left: 20px;
         font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+
       }
       
       h3{
+        font-family: 'Montserrat', sans-serif;
         color: #f9a11a;
+        font-weight: bold;
+      }
+      h1{
+        font-family: 'Montserrat', sans-serif;
+
+      }
+      p{
+        font-size: .9em;
+        line-height: .6em;
       }
 
-      .place-container{
-        
+      #folder-name {
+        background-color: #333;
+        width: 173%;
+        margin-left: -20px;
+        height: 100px;
+        margin-top: -20px;
+        margin-bottom: 40px;      
       }
 
+    #heading{
+        padding-top: 20px;
+        margin-left: 20px;
+        height: 100px;        
+        color: white;
+      }
+
+    hr{
+      width: 400px;
+    }
 
 
     </style>
@@ -47,18 +72,18 @@
   
 
 <div class="place-container">
+  <div id="folder-name">
+  <h1 id="heading">Folder: {{folder.folder_name}}</h1> <br>
+</div>
 
-  <h1>Favorites Folder</h1> <br>
 
+  {% for user_place in user_places %}
 
+     <h3 > {{ user_place.place.name }}</h3>
+      <p> {{ user_place.place.category }} </p>
+      <p> {{ user_place.place.address }}, {{ user_place.place.city }} </p><br>
 
-  {% for place in places %}
-
-     <h3 > {{ place.name }} Hello</h3>
-      <p> {{ place.category }} </p>
-      <p> {{ place.address }}, {{ place.city }} </p><br><br>
-
-      
+<hr>      
 
 
 {% endfor %}
@@ -72,22 +97,21 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpZSX9zpkBCKML4l0QRlfw34ogZyEsut8&callback=initMap">
     </script>
   <script type="text/javascript">
+
     var locations = [
-      ['Berlin Wall - East Side Gallery', 52.505268, 13.440004, 4],
-      ['Piazza Navona', 41.899026, 12.473304, 5],
-      ['Musei Vaticani', 41.9063979, 12.4537320, 3],
-      ['Checkpoint Charlie', 52.5072770, 13.3904410, 2],
-      ['Carousel For Missoula', 46.86969, -113.99708, 1],
-      ['Golden Gate Bridge', 37.802628, -122.46623, 1],
-      ['Càphê', 40.7219922, -73.997572, 1],
+    {% for user_place in user_places %}
+      [ '{{ user_place.place.name }}', {{ user_place.place.latitude }}, {{ user_place.place.longitude }}, 5],
+    {% endfor %}
     ];
+
+
 
 
 
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 40.979898, lng: -74.091797},
-    zoom: 2,
+    center: {lat: 40.580585, lng: -45.263672},
+    zoom: 3,
     mapTypeId: google.maps.MapTypeId.ROADMAP
   });
 

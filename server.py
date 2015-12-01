@@ -26,16 +26,16 @@ def index():
 
 
 
-@app.route('/folder-favorites')
+@app.route('/folder')
 def opening_folder():
-    
+    folder_id = request.args.get('folder_id')
     user_id = session.get('user_id')
 
-    
-    user_places = Place_folder.query.filter_by(folder_id = 3).all()
+    folder = Folder.query.get(folder_id)
+    user_places = Place_folder.query.filter_by(folder_id = folder_id).all()
     places = Place.query.filter(user_places==user_places).all()
 
-    return render_template("main.html", user_id=user_id, user_places=user_places, places=places)
+    return render_template("main.html", user_id=user_id, user_places=user_places, places=places, folder=folder)
     
 
 
@@ -144,47 +144,6 @@ def add_to_folder():
 
     return redirect("/results")
 
-
-
-
-
-
-
-        #Need to check if folder already exist in user's folders
-
-    
-
-    # if not folder:
-    #     new_folder = Folder(user=username, folder_name=folderName)
-        
-    #     db.session.add(new_folder)
-    #     db.session.commit()
-    #     folder_id = new_folder.folder_id
-
-    #     folder = new_folder
-
-
-    # place_in_folder = Place_folder.filter_by(place_id=place_id, folder_id=folder_id).first()
-        
-    # if not place_in_folder:
-    #     new_place_folder = Place_folder(place_id=place_id, folder_id=folder_id)
-
-    #     db.session.add(new_place_folder)
-    #     db.session.commit()
-
-    # else:
-    #     place_in_folder = place_in_folder
-
-
-    # if the new place not in an existing folder, add it to folder. Otherwise, add it to new folder. (places_folders)
-
-
-    # TODO: Find a way to add the place to the folder (and then save them)
-    # using place_folder database, I can link place and folder using their id's.
-
-
-# import pdb; pdb.set_trace()  n = next line c = continue until next break point  
-   
 
 
 
@@ -352,11 +311,6 @@ def log_out():
 
 
 
-@app.route('/map')
-def map():
-
-    return render_template("map_sample.html")
-
     
 
 if __name__ == "__main__":
@@ -366,7 +320,7 @@ if __name__ == "__main__":
 
     connect_to_db(app)
 
-    # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # # Use the DebugToolbar
+    # DebugToolbarExtension(app)
 
     app.run()

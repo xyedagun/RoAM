@@ -5,6 +5,7 @@ import pprint
 import json
 from flask_sqlalchemy import SQLAlchemy
 
+
 db = SQLAlchemy()
 
 
@@ -77,6 +78,8 @@ class Place_folder(db.Model):
     place_folder_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     place_id = db.Column(db.Integer, db.ForeignKey('places.place_id'), nullable=False)
     folder_id = db.Column(db.Integer, db.ForeignKey('folders.folder_id'), nullable=False)
+
+    place = db.relationship('Place', backref='place_folders')
 
     def __repr__(self):
 
