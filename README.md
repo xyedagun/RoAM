@@ -1,13 +1,17 @@
 # Roam
-Roam helps travelers make trip planning easier and more efficient. Rather than wading through guide books, ratings sites and maps, users can use the Roam travel app to surface their destination's top attractions, hotels, restaurants, museums and festivals in one click. Search results provide details, map locations and a snippet and link to further Yelp reviews for each recommendation. 
+Roam helps travelers make trip planning easier and more efficient. Rather than wading through guide books, ratings sites and maps, users can use the Roam travel app to surface their destination's top attractions, hotels, restaurants, museums and festivals in one click. Search results provide details, map locations and a snippet and link to further Yelp reviews for each recommendation.
+
 ![Roam Homepage](/static/img/homepage.png)
 
 
 Results section:
+
 ![Roam Homepage](/static/img/results.png)
 
 Users can create folders for each trip where they can save their favorite places and view them all together on a single map. Roam saves time for travelers who want to discover the best a city has to offer without hours of research, and easily navigate to their top picks on the go.
+
 ![Roam Homepage](/static/img/savetofolder.png)
+
 ![Roam Homepage](/static/img/folderpage.png)
 
 
