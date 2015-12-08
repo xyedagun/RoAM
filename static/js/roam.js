@@ -25,13 +25,17 @@ $(document).on('ready', function() {
 	});
 });
 
+
+
+//When a user click on a result, it opens a modal that shows the map location of the place
+
 function createMap(latitude, longitude, modalToShowId){
 	var mapLocation = $("#" + modalToShowId).find(".modal-map"); //the div for map. Different one for each modal2
 	var LatLong = {lat: latitude, lng: longitude};
 	var map = new google.maps.Map(mapLocation[0], 
 	    {
 	    	center: LatLong,
-	    	zoom: 14,
+	    	zoom: 10,
 	    	mapTypeId: google.maps.MapTypeId.ROADMAP,
 	    }
 	);
@@ -56,7 +60,7 @@ function createMap(latitude, longitude, modalToShowId){
 };
 
 
-
+//This adds the place of to user's folder
 function addPlaceToFolder(folderElement, placeId) {
 	var foldername = $(folderElement).text();
 	var data = {"business_id": placeId,
@@ -102,6 +106,31 @@ $(document).ready(function(){
     	}, 500);
     }   
 });
+
+
+///////////// Geolocation function/////////////////
+
+
+// $(document).ready(function(){
+// var x = document.getElementById("map");
+// function getLocation() {
+//     if (navigator.geolocation) {
+//         navigator.geolocation.getCurrentPosition(showPosition);
+//     } else {
+//         x.innerHTML = "Geolocation is not supported by this browser.";
+//     }
+// };
+// function showPosition(position) {
+//     x.innerHTML = "Latitude: " + position.coords.latitude + 
+//     "<br>Longitude: " + position.coords.longitude; 
+// };
+// });
+
+
+
+
+
+
 
 
 // $(document).on('ready', function() {

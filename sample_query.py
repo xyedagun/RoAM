@@ -1,8 +1,7 @@
 from yelpapi import YelpAPI
 import os
-# import json
 from pprint import pprint
-import os
+
 
 
 YELP_CONSUMER_KEY = os.environ.get("YELP_CONSUMER_KEY")

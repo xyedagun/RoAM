@@ -10,8 +10,7 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
-# Normally, if you use an undefined variable in Jinja2, it fails silently.
-# This is horrible. Fix this so that, instead, it raises an error.
+
 app.jinja_env.undefined = StrictUndefined
 
 
@@ -19,8 +18,17 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Show homepage."""
 
+
+
     user_id = session.get('user_id')
     folders = Folder.query.filter_by(user_id=user_id).all()
+
+    if user_id in session:
+        session['logged_in_user'] = existing_user.user_name
+        session['firstname'] = existing_user.fname
+        session['user_id'] = existing_user.user_id
+
+
 
     return render_template("base.html", folders=folders)
 
@@ -28,6 +36,7 @@ def index():
 
 @app.route('/folder')
 def opening_folder():
+    """This shows the places in user's folder when a folder is clicked"""
     folder_id = request.args.get('folder_id')
     user_id = session.get('user_id')
 
@@ -42,6 +51,8 @@ def opening_folder():
 
 @app.route('/results', methods=['POST'])
 def get_result():
+    """Shows the top results"""
+
     location = request.form.get("location")
 
     attraction_results = sample_query.search_attractions(location)
@@ -57,6 +68,7 @@ def get_result():
     print attraction_results, hotel_results,location
 
     return render_template('index.html', location=location, folders=folders, attraction_results=attraction_results, hotel_results=hotel_results, restaurant_results=restaurant_results, museum_results=museum_results, festival_results=festival_results)
+        
 
 
 
@@ -82,9 +94,9 @@ def add_to_folder():
     folderName = request.form.get("folder_name")
     business_id = request.form.get("business_id")
     existing_place = Place.query.filter_by(business_id = business_id).first()
-    # print request.form
 
-    #ask yelp to get data using business_id
+
+
     
     business = sample_query.yelp_api.business_query(id=business_id)
     if business['location']['address']:
@@ -216,7 +228,7 @@ def submit():
         session['firstname'] = existing_user.fname
         folder = Folder.query.filter_by(user_id = session['user_id'], folder_name = folderName).first()
     
-    return render_template("base.html",folders=folders)
+    return render_template("base.html")
     
 
 @app.route('/logged-in', methods=["POST"])
